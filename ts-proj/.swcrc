@@ -1,0 +1,20 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "ecmascript"
+    },
+    "target": "es2017",
+    "loose": true,
+    "minify": {
+      "compress": {
+        "unused": true
+      },
+      "mangle": true
+      }
+  },
+  "module": {
+    "type": "es6"
+  },
+  "minify": true,
+  "isModule": true
+}

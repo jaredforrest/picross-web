@@ -1,0 +1,29 @@
+{
+    "include": [
+        "./src/*"
+    ],
+    "exclude" : [
+        "./node_modules/"
+    ],
+    "compilerOptions": {
+        "plugins": [
+            { "transform": "ts-macros" }
+        ],
+        "outDir": "./builds",
+        "target": "es2017",
+        //"target": "es3",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "module": "esnext",
+        //"noUnusedLocals": true,
+        "noImplicitAny": true,
+        "useUnknownInCatchVariables": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "alwaysStrict": true,
+        "allowJs": true
+
+    }
+}

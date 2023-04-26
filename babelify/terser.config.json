@@ -1,0 +1,14 @@
+{
+  "compress": {
+    "passes": 5,
+    "toplevel": true,
+    "hoist_funs": true,
+    "unsafe": true
+  },
+  "mangle": {
+    "toplevel": true,
+    "properties": {
+      "reserved": ["Content-type"]
+    }
+  }
+}

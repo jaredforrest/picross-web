@@ -1,0 +1,19 @@
+{
+  "targets": {
+
+    "chrome": 57,
+    "firefox": 52,
+    "edge": 16,
+    "safari": 11,
+    "opera": 44,
+    "ie": 11
+  },
+    "presets": [
+        ["@babel/typescript", {"optimizeConstEnums": true}],
+        ["@babel/env", {
+          "useBuiltIns": "usage",
+          "corejs": 3.29,
+          "loose": true
+      }]
+    ]
+}

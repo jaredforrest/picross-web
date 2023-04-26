@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-US">
+    <meta charset="utf-8" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="{{ url_for('static',filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div id="g">
+      <table id="n"></table>
+      <table id="t"></table>
+      <table id="s"></table>
+    </div>
+    <script src="{{ url_for('static', filename= 'js/index.js') }}"></script>
+    <script>
+      init({{ side_nums }},{{ top_nums }},false)
+    </script>
+  </body>
+</html>
