@@ -32,7 +32,7 @@ Array.prototype.indexOf = Array.prototype.indexOf || _arrIndexOf;
 
 import globalThis from "./global";
 //import addProperty from './ieAddProperty'
-import { docHijack } from "./docHijack";
+//import { docHijack } from "./docHijack";
 
 if ("document" in globalThis) {
   // Full polyfill for browsers with no classList support
