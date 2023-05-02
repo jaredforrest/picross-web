@@ -16,14 +16,12 @@ export function padToMatrix(input: number[][], padding: number): number[][] {
 export function checkEqual<T>(array1: T[], array2: T[]): boolean {
   if (array1.length != array2.length) return false;
 
-  for (let i = 0, l = array1.length; i < l; i++) {
-    const ai = array1[i];
-    const bi = array2[i];
+  for (let i = 0; i < array1.length; i++) {
 
-    if (ai instanceof Array) {
-      // ai has same type as bi
-      if (!checkEqual(ai, bi as unknown[])) return false;
-    } else if (ai != bi) {
+    if (array1[i] instanceof Array) {
+      // array1 has same type as array2
+      if (!checkEqual(array1[i] as unknown[], array2[i] as unknown[])) return false;
+    } else if (array1[i] != array2[i]) {
       return false;
     }
   }

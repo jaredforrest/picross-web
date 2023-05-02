@@ -1,5 +1,4 @@
 const path = require("path");
-//const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
 module.exports = {
   //mode: "development",
@@ -11,7 +10,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-//    filename: "[name].js"
+    filename: "init.js"
   },
   optimization: {
       minimize: false

@@ -17,12 +17,12 @@ function createSideNums(
   sideNumsPadded: number[][],
 ): void {
   sideNumsElement.textContent = "";
+  sideNumsElement.innerText = "";
   sideNumsPadded.forEach((row) => {
     const rowElement = document.createElement("tr");
     row.forEach((num) => {
       const cell = document.createElement("td");
       if (num) {
-        //const text = doc.createTextNode(`${num}`);
         const text = document.createTextNode(`${num}`);
         cell.appendChild(text);
       }
@@ -68,9 +68,7 @@ function gridInit(
   const cellDoms: HTMLTableCellElement[] = newArray(
     sideNums.length * topNums.length,
     () => {
-      const cell = document.createElement("td");
-      cell.classList.add("grid-cell");
-      return cell;
+      return document.createElement("td");
     },
   );
 
@@ -96,7 +94,7 @@ function gridInit(
         } else if (nonoGrid.checkComplete()) {
           alert("Hooray");
         }
-      });
+      }, false);
       rowDom.appendChild(cellDom);
     });
     grid.appendChild(rowDom);
@@ -106,28 +104,28 @@ function gridInit(
 
   // TODO maybe clean this code up a bit
   if (isNew) {
-    const submitButton = $safeElementById!("submit-button", HTMLElement);
+    const submitButton = $safeElementById!("submit-button", HTMLButtonElement);
     const levelNameElement = $safeElementById!("level-name", HTMLInputElement);
     const validPassword = $safeElementById!("error-msg", HTMLElement);
-    const submitButtom = $safeElementById!("submit-button", HTMLButtonElement);
 
     levelNameElement.addEventListener("keyup", function () {
       void checkUsername(this.value).then((value) => {
         if (value) {
-          submitButtom.disabled = true;
+          submitButton.disabled = true;
         } else {
-          submitButtom.disabled = false;
+          submitButton.disabled = false;
         }
         validPassword.textContent = value;
+        validPassword.innerText = value;
       });
-    });
+    }, false);
 
     submitButton.addEventListener("click", () => {
       void uploadPuzzle(
         levelNameElement.value,
         nonoGrid.grid_.calculateSideNums(),
       );
-    });
+    }, false);
   }
 }
 

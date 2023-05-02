@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "checkJs": true,
+//        "noImplicitAny": true,
+//        "useUnknownInCatchVariables": true,
+//        "strict": true,
+//        "strictNullChecks": true,
+//        "alwaysStrict": true
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ]
+}

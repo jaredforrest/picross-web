@@ -1,0 +1,8 @@
+/.ts-proj-old-browser/
+/.ts-proj-old/
+node_modules/
+__pycache__/
+flask/env/
+
+dist/
+builds/

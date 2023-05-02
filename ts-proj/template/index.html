@@ -10,12 +10,25 @@
   </head>
 
   <body>
-    <div id="grid-container">
-      <table id="nono-grid"></table>
-      <table id="top-nums"></table>
-      <table id="side-nums"></table>
-    </div>
-    <script src="{{ url_for('static', filename= 'js/index.js') }}"></script>
+    <table id="grid-container">
+      <tr>
+        <td></td>
+        <td>
+          <table id="top-nums"></table>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <table id="side-nums"></table>
+        </td>
+        <td>
+          <table id="nono-grid"></table>
+        </td>
+      </tr>
+    </table>
+
+    <script src="{{ url_for('static', filename= 'oldjs/index.js') if is_old_browser else url_for('static', filename= 'js/index.js') }}"></script>
     <script>
       init({{ side_nums }},{{ top_nums }},false)
     </script>

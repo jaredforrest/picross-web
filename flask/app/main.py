@@ -3,13 +3,16 @@ from flask import Flask, Response, redirect, render_template, url_for, abort
 from flask_cors import CORS
 from sqlalchemy.orm import scoped_session
 from flask import request
+from ua_parser import user_agent_parser
 
 from sqlalchemy import exc
 #from flask_minify import Minify
 from flask_compress import Compress
 
+
 from . import models
 from .database import SessionLocal, engine
+from .user_agent import is_old_browser
 
 import greenlet
 
@@ -55,10 +58,12 @@ def get_puzzle(puzzle_id: int):
 
 @app.route("/new_puzzle/<int:width>x<int:height>")
 def new_puzzle(width: int, height: int):
+    is_old = is_old_browser(request.headers.get('User-Agent', ''))
+    print(is_old)
     if width > 100 or height > 100 or width < 1 or height < 1:
         return "Size out of range"
     else:
-        return render_template('new.html', side_nums = [[]] * width, top_nums = [[]] * height)
+        return render_template('new.html', side_nums = [[]] * width, top_nums = [[]] * height, is_old_browser=is_old)
 
 @app.route("/add_new", methods=['POST'])
 def add_new():
