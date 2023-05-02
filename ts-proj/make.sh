@@ -27,9 +27,12 @@ do
 done
 
 # copy to server
+mkdir -p ../flask/app/static/css
+mkdir -p ../flask/app/static/js
 cp dist/index.js ../flask/app/static/js/index.js
 cp dist/style.css ../flask/app/static/css/style.css
 
+mkdir -p ../flask/app/templates
 cp dist/*.html ../flask/app/templates/
 
 # extra
@@ -39,10 +42,13 @@ npx brotli-cli compress dist/index.js
 cp dist/index.js ../babelify/src/i
 cat ../babelify/src/init.js dist/index.js > ../babelify/src/index.js
 
-cd ../babelify
+cd ../babelify || exit
 
 npm install
 mkdir -p dist
 npx webpack
 npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
+
+# copy to server
+mkdir -p ../flask/app/static/js
 cp dist/index.js ../flask/app/static/oldjs/index.js

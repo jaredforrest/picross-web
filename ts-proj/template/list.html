@@ -2,14 +2,14 @@
 <html>
 
 <head>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"></link>
 </head>
 
 <body>
     {%- for puzzle in puzzles %}
     <a href="../puzzle/{{puzzle.id}}">
-        <div> name: {{puzzle.name }}, author: {{ puzzle.author }}, width: {{ puzzle.data.top_nums|length }} height: {{ puzzle.data.side_nums|length }} </div>
+        <div> name: {{ puzzle.name }}, author: {{ puzzle.author }}, width: {{ puzzle.data.top_nums|length }} height: {{ puzzle.data.side_nums|length }} </div>
     </a>
     {% endfor %}
 
