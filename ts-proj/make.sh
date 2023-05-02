@@ -40,7 +40,7 @@ npx brotli-cli compress dist/index.js
 
 #make compat files
 mkdir -p ../babelify/templates
-cp template/style.css ../babelify/templates
+cp dist/style.css ../babelify/templates
 cat ../babelify/src/init.js dist/index.js > ../babelify/src/index.js
 
 cd ../babelify || exit
