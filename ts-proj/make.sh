@@ -12,7 +12,8 @@ SED='s/submit-button/b/g;
      s/error-msg/v/g;'
 
 # build
-mkdir dist
+npx install
+mkdir -p dist
 npx ttsc && 
 npx spack &&
 npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
@@ -40,7 +41,8 @@ cat ../babelify/src/init.js dist/index.js > ../babelify/src/index.js
 
 cd ../babelify
 
-mkdir dist
+npx install
+mkdir -p dist
 npx webpack
 npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
 cp dist/index.js ../flask/app/static/oldjs/index.js
