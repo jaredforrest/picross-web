@@ -12,6 +12,7 @@ SED='s/submit-button/b/g;
      s/error-msg/v/g;'
 
 # build
+mkdir dist
 npx ttsc && 
 npx spack &&
 npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
@@ -28,8 +29,6 @@ done
 cp dist/index.js ../flask/app/static/js/index.js
 cp dist/style.css ../flask/app/static/css/style.css
 
-#cp dist/index.html ../flask/app/templates/index.html
-#cp dist/new.html ../flask/app/templates/new.html
 cp dist/*.html ../flask/app/templates/
 
 # extra
@@ -41,6 +40,7 @@ cat ../babelify/src/init.js dist/index.js > ../babelify/src/index.js
 
 cd ../babelify
 
+mkdir dist
 npx webpack
 npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
 cp dist/index.js ../flask/app/static/oldjs/index.js
