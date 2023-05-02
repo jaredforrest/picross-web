@@ -18,6 +18,7 @@ table {
 
 /*#nono-grid tr td, #top-nums tr td, #side-nums tr td {*/
 #grid-container tr td tr td {
+  border-color: #ccc;
   border-color: var(--border-color);
   width: 16px;
   height: 16px;
@@ -36,6 +37,7 @@ table {
 #nono-grid,
 #top-nums,
 #side-nums {
+  border: 2px solid #ccc;
   border: 2px solid var(--border-color);
 }
 
@@ -44,9 +46,11 @@ table {
   border-right: 1px solid;
 }
 #nono-grid :nth-child(5n) td {
+  border-bottom: 2px solid #ccc;
   border-bottom: 2px solid var(--border-color);
 }
 #nono-grid :nth-child(5n) {
+  border-right: 2px solid #ccc;
   border-right: 2px solid var(--border-color);
 }
 
@@ -57,6 +61,7 @@ table {
   border-right: 1px solid;
 }
 #top-nums tr :nth-child(5n) {
+  border-right: 2px solid #ccc;
   border-right: 2px solid var(--border-color);
 }
 
@@ -67,6 +72,7 @@ table {
   border-bottom: 1px solid;
 }
 #side-nums :nth-child(5n) td {
+  border-bottom: 2px solid #ccc;
   border-bottom: 2px solid var(--border-color);
 }
 

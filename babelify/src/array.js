@@ -18,7 +18,6 @@ Array.prototype.forEach = function(callbackFn) {
   * @returns {U[]}
   */
 Array.from = function(arrayLike, mapFn) {
-    /** @type {U[]} */
     const ret = []
     for(let i = 0; i < arrayLike.length; i++){
         ret.push(mapFn(arrayLike[i],i))

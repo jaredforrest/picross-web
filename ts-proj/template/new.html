@@ -5,7 +5,7 @@
     <link
       type="text/css"
       rel="stylesheet"
-      href="{{ url_for('static',filename='css/style.css') }}"
+      href="{{ url_for('static',filename='oldcss/style.css') if is_old_browser else url_for('static',filename='css/style.css') }}"
     />
   </head>
 

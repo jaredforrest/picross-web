@@ -39,7 +39,8 @@ cp dist/*.html ../flask/app/templates/
 npx brotli-cli compress dist/index.js
 
 #make compat files
-cp dist/index.js ../babelify/src/i
+mkdir -p ../babelify/templates
+cp template/style.css ../babelify/templates
 cat ../babelify/src/init.js dist/index.js > ../babelify/src/index.js
 
 cd ../babelify || exit
@@ -49,6 +50,11 @@ mkdir -p dist
 npx webpack
 npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
 
+# now the css
+npx postcss --use postcss-css-variables -o dist/style.css templates/style.css
+
 # copy to server
-mkdir -p ../flask/app/static/js
+mkdir -p ../flask/app/static/oldjs
+mkdir -p ../flask/app/static/oldcss
 cp dist/index.js ../flask/app/static/oldjs/index.js
+cp dist/style.css ../flask/app/static/oldcss/style.css
