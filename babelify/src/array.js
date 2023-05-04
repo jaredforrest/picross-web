@@ -66,3 +66,18 @@ Array.prototype.filter = function(callbackFn) {
     }
     return ret;
 }
+
+ /**
+  *
+  * @template T
+  * @param {T} searchElement
+  * @returns {number}
+  */
+Array.prototype.indexOf = function (searchElement) {
+  for (let i = 0; i < this.length; i++) {
+    if (i in this && this[i] === searchElement) {
+      return i;
+    }
+  }
+  return -1;
+};

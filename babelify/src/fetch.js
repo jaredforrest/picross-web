@@ -1,9 +1,16 @@
 import Promise from './promise/index'
 
+ /**
+  *
+  * @param {RequestInfo | URL} url 
+  * @param {RequestInit} options
+  * @returns Promise<Response> 
+  */
 export default function fetch (url, options) {
 	options = options || {};
 	return new Promise((resolve, reject) => {
 		const request = new XMLHttpRequest();
+         /** @type {string[]} */
 		const keys = [];
 		const headers = {};
 
@@ -31,8 +38,18 @@ export default function fetch (url, options) {
 			  request
 			  	.getAllResponseHeaders()
 			  	.toLowerCase()
-			  	.replace(/^(.+?):/gm, (m, key) => {
-			  		headers[key] || keys.push((headers[key] = key));
+			  	.replace(/^(.+?):/gm,
+                     /**
+                      *
+                      * @param {string} _ 
+                      * @param {string} key 
+                      * @returns {string}
+                      */
+                    (_, key) => {
+                        if(!(headers[key])){
+                            headers[key] = key;
+                            keys.push(key)
+                        }
 			  	});
 			  resolve(response());
             }
