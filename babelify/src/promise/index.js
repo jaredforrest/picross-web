@@ -2,28 +2,40 @@
 //import allSettled from './allSettled';
 //import any from './any';
 
-// Use polyfill for setImmediate for performance gains
 /**
- * @constructor
- * @param {() => void} fn
+ * @param {(args: void) => void} fn
  */
-var _immediateFn = function(fn) {
+let _immediateFn = function(fn) {
     setTimeout(fn, 0);
 };
 
-var _unhandledRejectionFn = function (err) {
+ /**
+  * @param {unknown} err 
+  */
+let _unhandledRejectionFn = function (err) {
   if (typeof console !== 'undefined' && console) {
     console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
   }
 };
 
-//function isArray(x) {
-//  return Boolean(x && typeof x.length !== 'undefined');
-//}
-
 function noop() {}
 
 // Polyfill for Function.prototype.bind
+ /**
+  * @template T
+  * @typedef {T extends (this: infer U, ...args: never) => any ? U : unknown} ThisParameterType
+  */
+ /**
+  * @template T
+  * @typedef {unknown extends ThisParameterType<T> ? T : T extends (...args: infer A) => infer R ? (...args: A) => R : T} OmitThisParameter
+  */
+ /**
+  *
+  * @template {Function} T
+  * @param {T} fn 
+  * @param {ThisParameterType<T>} thisArg 
+  * @returns OmitThisParameter<T>
+  */
 function bind(fn, thisArg) {
   return function() {
     fn.apply(thisArg, arguments);
@@ -31,23 +43,33 @@ function bind(fn, thisArg) {
 }
 
 /**
+ * @template T
+ *
  * @constructor
- * @param {Function} fn
+ * @param {(resolve: (value: T) => void, reject: (reason?: any) => void) => void} fn
  */
+
 function Promise(fn) {
   //if (typeof fn !== 'function') throw new TypeError('not a function');
-  /** @type {!number} */
+  /** @type {number} */
   this._state = 0;
-  /** @type {!boolean} */
+  /** @type {boolean} */
   this._handled = false;
-  /** @type {Promise|undefined} */
+  /** @type {Promise<T>|undefined} */
   this._value = undefined;
-  /** @type {!Array<!Function>} */
+  /** @type {Array<Handler<T>>} */
   this._deferreds = [];
 
   doResolve(fn, this);
 }
 
+ /**
+  * @template T
+  *
+  * @param {Promise<T>} self 
+  * @param {Handler<T>} deferred 
+  * @returns void 
+  */
 function handle(self, deferred) {
   while (self._state === 3) {
     self = self._value;
@@ -74,6 +96,13 @@ function handle(self, deferred) {
   });
 }
 
+ /**
+  *
+  * @template T
+  * @param {Promise<T>} self 
+  * @param {Promise<T>} newValue 
+  * @returns void 
+  */
 function resolve(self, newValue) {
   try {
     // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
@@ -102,12 +131,24 @@ function resolve(self, newValue) {
   }
 }
 
+ /**
+  *
+  * @template T
+  * @param {Promise<T>} self 
+  * @param {unknown} newValue 
+  * @returns void 
+  */
 function reject(self, newValue) {
   self._state = 2;
   self._value = newValue;
   finale(self);
 }
 
+ /**
+  *
+  * @template T
+  * @param {Promise<T>} self 
+  */
 function finale(self) {
   if (self._state === 2 && self._deferreds.length === 0) {
     _immediateFn(function() {
@@ -123,9 +164,15 @@ function finale(self) {
   self._deferreds = null;
 }
 
-/**
- * @constructor
- */
+ /**
+  *
+  * @template T
+  *
+  * @constructor
+  * @param {(value: T) => T} onFulfilled 
+  * @param {(reason?: any) => never} onRejected 
+  * @param {Promise<T>} promise 
+  */
 function Handler(onFulfilled, onRejected, promise) {
   this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
   this.onRejected = typeof onRejected === 'function' ? onRejected : null;
@@ -138,6 +185,13 @@ function Handler(onFulfilled, onRejected, promise) {
  *
  * Makes no guarantees about asynchrony.
  */
+ /**
+  * @template T
+  *
+  * @param {(resolve: (value: T) => void, reject: (reason?: any) => void) => void} fn
+  * @param {Promise<T>} self 
+  * @returns {void} 
+  */
 function doResolve(fn, self) {
   var done = false;
   try {
@@ -160,17 +214,53 @@ function doResolve(fn, self) {
   }
 }
 
+ /**
+  *
+  * @param {(reason?: any) => never} onRejected 
+  * @returns {Promise<T>}
+  */
 Promise.prototype['catch'] = function(onRejected) {
   return this.then(null, onRejected);
 };
 
+ /**
+  *
+  * @param {(value: T) => T} [onFulfilled]
+  * @param {(reason?: any) => never} [onRejected]
+  * @returns 
+  */
 Promise.prototype.then = function(onFulfilled, onRejected) {
-  // @ts-ignore
   var prom = new this.constructor(noop);
 
   handle(this, new Handler(onFulfilled, onRejected, prom));
   return prom;
 };
+
+ /**
+  * @template T
+  *
+  * @param {T | Promise<T>} value 
+  * @returns {Promise<T>}
+  */
+Promise.resolve = function(value) {
+  if (value && typeof value === 'object' && value.constructor === Promise) {
+    return value;
+  }
+
+  return new Promise(function(resolve) {
+    resolve(value);
+  });
+};
+
+Promise.reject = function(value) {
+  return new Promise(function(resolve, reject) {
+    reject(value);
+  });
+};
+
+//function isArray(x) {
+//  return Boolean(x && typeof x.length !== 'undefined');
+//}
 
 /*Promise.prototype['finally'] = promiseFinally;
 
@@ -218,22 +308,6 @@ Promise.any = any;
 
 Promise.allSettled = allSettled;
 */
-
-Promise.resolve = function(value) {
-  if (value && typeof value === 'object' && value.constructor === Promise) {
-    return value;
-  }
-
-  return new Promise(function(resolve) {
-    resolve(value);
-  });
-};
-
-Promise.reject = function(value) {
-  return new Promise(function(resolve, reject) {
-    reject(value);
-  });
-};
 
 /*
 

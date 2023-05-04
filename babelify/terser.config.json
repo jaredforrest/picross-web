@@ -3,12 +3,8 @@
     "passes": 5,
     "toplevel": true,
     "hoist_funs": true,
-    "unsafe": true
+    "unsafe": true,
+    "properties": false
   },
-  "mangle": {
-    "toplevel": true,
-    "properties": {
-      "reserved": ["Content-type"]
-    }
-  }
+  "mangle": {}
 }

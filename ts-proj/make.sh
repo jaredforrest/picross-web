@@ -48,7 +48,8 @@ cd ../babelify || exit
 npm install
 mkdir -p dist
 npx webpack
-npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
+npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js
+#cp ./dist/init.js ./dist/index.js
 
 # now the css
 npx postcss --use postcss-css-variables -o dist/style.css templates/style.css
