@@ -5,7 +5,7 @@
     <link
       type="text/css"
       rel="stylesheet"
-      href="{{ url_for('static',filename='css/style.css') }}"
+      href="{{ url_for('static',filename='oldcss/style.css') if is_old_browser else url_for('static',filename='css/style.css') }}"
     />
   </head>
 
@@ -14,16 +14,39 @@
       <tr>
         <td></td>
         <td>
-          <table id="top-nums"></table>
+          <table id="top-nums">
+            {% for row in transposed_padded_top_nums %}
+            <tr>
+              {% for num in row %}
+              <td>{{ num if num else "" }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
         </td>
       </tr>
-
       <tr>
         <td>
-          <table id="side-nums"></table>
+          <table id="side-nums">
+            {% for row in padded_side_nums %}
+            <tr>
+              {% for num in row %}
+              <td>{{ num if num else "" }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
         </td>
         <td>
-          <table id="nono-grid"></table>
+          <table id="nono-grid">
+            {% for row in side_nums %}
+            <tr>
+              {% for col in top_nums %}
+              <td class="empty"></td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
         </td>
       </tr>
     </table>

@@ -1,9 +1,7 @@
-from typing import List
-from flask import Flask, Response, redirect, render_template, url_for, abort
+from flask import Flask, redirect, render_template, url_for, abort
 from flask_cors import CORS
 from sqlalchemy.orm import scoped_session
 from flask import request
-from ua_parser import user_agent_parser
 
 from sqlalchemy import exc
 #from flask_minify import Minify
@@ -52,18 +50,31 @@ def get_puzzle(puzzle_id: int):
         #num = id(2)
         #print(id)
         #return jsonify(record.to_dict())
-        return render_template('index.html', side_nums = record.data["side_nums"], top_nums = record.data["top_nums"])
+        #return render_template('index.html', side_nums = record.data["side_nums"], top_nums = record.data["top_nums"])
+        is_old = is_old_browser(request.headers.get('User-Agent', ''))
+        side_nums = record.data["side_nums"]
+        top_nums = record.data["top_nums"]
+        padded_side_nums = pad_to_matrix(side_nums, maxSubArray(side_nums) + 1)
+        padded_top_nums = pad_to_matrix(top_nums, maxSubArray(top_nums) + 1)
+        transposed_padded_top_nums = list(zip(*padded_top_nums))
+        print(side_nums, top_nums)
+        print(padded_side_nums, padded_top_nums)
+        return render_template('index.html', side_nums = side_nums, top_nums = top_nums, padded_side_nums = padded_side_nums, transposed_padded_top_nums = transposed_padded_top_nums, is_old_browser=is_old)
     else:
         return str(puzzle_id)
 
 @app.route("/new_puzzle/<int:width>x<int:height>")
 def new_puzzle(width: int, height: int):
-    is_old = is_old_browser(request.headers.get('User-Agent', ''))
-    print(is_old)
     if width > 100 or height > 100 or width < 1 or height < 1:
         return "Size out of range"
     else:
-        return render_template('new.html', side_nums = [[]] * width, top_nums = [[]] * height, is_old_browser=is_old)
+        is_old = is_old_browser(request.headers.get('User-Agent', ''))
+        side_nums = [[]] * height
+        top_nums = [[]] * width
+        padded_side_nums = pad_to_matrix(side_nums, (width + 3) // 2)
+        padded_top_nums = pad_to_matrix(top_nums, (height + 3) // 2)
+        transposed_padded_top_nums = list(zip(*padded_top_nums))
+        return render_template('new.html', side_nums = side_nums, top_nums = top_nums, padded_side_nums = padded_side_nums, transposed_padded_top_nums = transposed_padded_top_nums, is_old_browser=is_old)
 
 @app.route("/add_new", methods=['POST'])
 def add_new():
@@ -153,6 +164,17 @@ def parse_data(data: list[list[list[int]]]) -> models.GridData | None:
         return None
     return {"side_nums": data[0], "top_nums": data[1]}
 
+# Adds padding of 0 to the start of each list in input
+def pad_to_matrix(l: list[list[int]], padding: int):
+    return [pad_list(e, padding) for e in l]
+
+def pad_list(l: list[int], padding: int):
+    extra = padding - len(l)
+    return ([0] * extra) + l
+
+# Find the length of the longest list in a list of lists
+def maxSubArray(arr: list[list]):
+    return max([len(e) for e in arr])
 
 @app.teardown_appcontext
 def remove_session(*args, **kwargs):
