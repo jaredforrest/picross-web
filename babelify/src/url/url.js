@@ -6,7 +6,7 @@ import URLSearchParams from "./urlSearchParams";
   * @param {string | URL} url
   * @param {string | URL | undefined} [base]
   */
-export default function URL(url, base) {
+export function URL(url, base) {
     /** @type {string} */
     this.core = ""
 
@@ -24,3 +24,16 @@ URL.prototype.toString = function() {
         return this.core
     }
 };
+
+/** 
+ * Checks if URL exists
+ * @returns {boolean}
+ */
+export function checkURLExists(){
+  try {
+    let u = new URL("http://a");
+    return true
+  } catch {
+    return false;
+  }
+}

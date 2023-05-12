@@ -1,25 +1,28 @@
-import './array';
+import arrayPolyfill from './array';
 import fetch_ from './fetch';
 import classListGetter from './classList';
 import classListReplace from './classListReplace';
-import URL_ from './url/url';
+import { URL as URL_, checkURLExists } from './url/url';
 import addEvent from './addEventListener';
 
 import globalThis from './global'
 
+arrayPolyfill();
+
 if(!(globalThis.fetch)){
     globalThis.fetch = fetch_
 }
-if(!(globalThis.URL)){
+if(checkURLExists()){
     globalThis.URL = URL_
 }
+
 if ("document" in globalThis) {
   if (!("classList" in document.createElement("_")) || (document.createElementNS &&
 !("classList" in document.createElementNS("http://www.w3.org/2000/svg", "g"))
   )) {
     (function () {
       if (Object.defineProperty) {
-        var classListProperties = {
+        let classListProperties = {
           get: classListGetter,
           enumerable: true,
           configurable: true,

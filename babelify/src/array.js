@@ -1,3 +1,4 @@
+export default function arrayPolyfill(){
  /**
   *
   * @template T
@@ -81,3 +82,4 @@ Array.prototype.indexOf = function (searchElement) {
   }
   return -1;
 };
+}

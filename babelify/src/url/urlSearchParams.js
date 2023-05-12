@@ -1,13 +1,13 @@
 
  /**
   *
-  * @param {Object.<string, string>} options 
+  * @param {Object.<string, string>} [options] 
   */
 export default function URLSearchParams(options) {
     if(options === undefined){
         options = {}
     }
-    /** @type {Object.<string, number>} */
+    /** @type {Object.<string, string>} */
     this.options = options
 }
 
