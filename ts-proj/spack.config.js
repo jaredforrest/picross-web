@@ -2,7 +2,7 @@ const { config } = require("@swc/core/spack");
  
 module.exports = config({
   entry: {
-    init: __dirname + "/builds/init.js",
+    init: __dirname + "/src/init.js",
   },
   output: {
     path: __dirname + "/dist",

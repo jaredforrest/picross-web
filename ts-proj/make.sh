@@ -14,7 +14,6 @@ SED='s/submit-button/b/g;
 # build
 npm install
 mkdir -p dist
-npx ttsc && 
 npx spack &&
 npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
 
