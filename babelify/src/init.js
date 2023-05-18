@@ -89,3 +89,7 @@ if ("Location" in globalThis) {
     }
   }
 }
+
+if(!(document.documentElement.style.setProperty)){
+    document.documentElement.style.setProperty = function() {};
+}
