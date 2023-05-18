@@ -1,13 +1,15 @@
 import { maxSubArray, transpose, padToMatrix, newArray } from "./util";
 import { NonoGrid } from "./nonoGrid";
 import { checkUsername, uploadPuzzle } from "./network";
+
 /**
  * @param {HTMLTableElement} sideNumsElement - HTMLElement refering to SideNums
  * @param {number[][]} sideNumsPadded - sideNums padded with 0 so they each row/columns is the same width/height
  * @returns {void}
  */
 function createSideNums(sideNumsElement, sideNumsPadded) {
-  sideNumsElement.innerHTML = "";
+  sideNumsElement.innerText = "";
+  sideNumsElement.textContent = "";
   sideNumsPadded.forEach((row) => {
     const rowElement = document.createElement("tr");
     row.forEach((num) => {
@@ -73,7 +75,8 @@ function gridInit(
   );
   const nonoGrid = new NonoGrid(sideNums, topNums, cellDoms);
   // The cell are added to the page
-  gridElement.innerHTML = "";
+  gridElement.innerText = "";
+  gridElement.textContent = "";
   sideNums.forEach((_, row) => {
     const rowDom = document.createElement("tr");
     topNums.forEach((_, column) => {
@@ -83,6 +86,8 @@ function gridInit(
         "click",
         () => {
           nonoGrid.toggleCell(row, column);
+          // TODO This is too computationally intensive
+          // need to find a better way without recreating everything
           if (isNew) {
             const [sideNums, topNums] = nonoGrid.grid_.calculateSideNums();
             createSideTopNums(
@@ -106,13 +111,13 @@ function gridInit(
   // TODO maybe clean this code up a bit
   if (isNew) {
     const submitButton = /** @type {HTMLButtonElement} */ (
-      document.getElementById("submit-button")
+      document.querySelector("#submit-button")
     );
     const levelNameElement = /** @type {HTMLInputElement} */ (
-      document.getElementById("level-name")
+      document.querySelector("#level-name")
     );
     const validPassword = /** @type {HTMLElement} */ (
-      document.getElementById("error-msg")
+      document.querySelector("#error-msg")
     );
     levelNameElement.addEventListener(
       "keyup",
@@ -148,14 +153,20 @@ function gridInit(
  * @returns {void}
  */
 export function initLevel(sideNums, topNums, isNew = false) {
+  const root = document.documentElement;
+  root.style.setProperty(
+    "--cell-size",
+    `${Math.max(10, (300 / topNums.length) | 0)}px`,
+  );
+
   const grid = /** @type {HTMLTableElement} */ (
-    document.getElementById("nono-grid")
+    document.querySelector("#nono-grid")
   );
   const sideNumsElement = /** @type {HTMLTableElement} */ (
-    document.getElementById("side-nums")
+    document.querySelector("#side-nums")
   );
   const topNumsElement = /** @type {HTMLTableElement} */ (
-    document.getElementById("top-nums")
+    document.querySelector("#top-nums")
   );
   gridInit(sideNums, sideNumsElement, topNums, topNumsElement, grid, isNew);
 }
