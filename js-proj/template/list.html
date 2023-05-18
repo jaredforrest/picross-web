@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="{{ url_for('static',filename='oldcss/style.css') if is_old_browser else url_for('static',filename='css/style.css') }}"
-    />
-  </head>
-
-  <body>
+{% extends "base.html" %} {% block content %}
     {%- for puzzle in puzzles %}
     <a href="../puzzle/{{puzzle.id}}">
       <div>
@@ -19,5 +8,4 @@
       </div>
     </a>
     {% endfor %}
-  </body>
-</html>
+{% endblock content %}

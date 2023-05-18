@@ -1,59 +1,50 @@
-<!DOCTYPE html>
-<html>
-  <head lang="en-US">
-    <meta charset="utf-8" />
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="{{ url_for('static',filename='oldcss/style.css') if is_old_browser else url_for('static',filename='css/style.css') }}"
-    />
-  </head>
+{% extends "base.html" %} {% block content %}
+<table id="grid-container">
+  <tr>
+    <td></td>
+    <td>
+      <table id="top-nums">
+        {% for row in transposed_padded_top_nums %}
+        <tr>
+          {% for num in row %}
+          <td>{{ num if num else "" }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table id="side-nums">
+        {% for row in padded_side_nums %}
+        <tr>
+          {% for num in row %}
+          <td>{{ num if num else "" }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+    </td>
+    <td>
+      <table id="nono-grid">
+        {% for row in side_nums %}
+        <tr>
+          {% for col in top_nums %}
+          <td class="empty"></td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+    </td>
+  </tr>
+</table>
 
-  <body>
-    <table id="grid-container">
-      <tr>
-        <td></td>
-        <td>
-          <table id="top-nums">
-            {% for row in transposed_padded_top_nums %}
-            <tr>
-              {% for num in row %}
-              <td>{{ num if num else "" }}</td>
-              {% endfor %}
-            </tr>
-            {% endfor %}
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <table id="side-nums">
-            {% for row in padded_side_nums %}
-            <tr>
-              {% for num in row %}
-              <td>{{ num if num else "" }}</td>
-              {% endfor %}
-            </tr>
-            {% endfor %}
-          </table>
-        </td>
-        <td>
-          <table id="nono-grid">
-            {% for row in side_nums %}
-            <tr>
-              {% for col in top_nums %}
-              <td class="empty"></td>
-              {% endfor %}
-            </tr>
-            {% endfor %}
-          </table>
-        </td>
-      </tr>
-    </table>
+<div id="qrcode"></div>
 
-    <script src="{{ url_for('static', filename= 'oldjs/index.js') if is_old_browser else url_for('static', filename= 'js/index.js') }}"></script>
-    <script>
-      init({{ side_nums }},{{ top_nums }},false)
-    </script>
-  </body>
-</html>
+{% endblock content %} {% block scripts %}
+<script src="{{ url_for('static', filename= 'oldjs/index.js') if is_old_browser else url_for('static', filename= 'js/index.js') }}"></script>
+<script>
+  init({{ side_nums }},{{ top_nums }},false)
+</script>
+{% endblock scripts %}
