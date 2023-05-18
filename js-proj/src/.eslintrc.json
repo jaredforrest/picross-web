@@ -46,6 +46,8 @@
     "symbol-description": 2,
     "template-curly-spacing": [2, "never"],
     "yield-star-spacing": [2, "both"],
-    "jsdoc/no-undefined-types": 1
+    "jsdoc/no-undefined-types": 1,
+    "jsdoc/require-param-description": 0,
+    "jsdoc/require-returns-description": 0
   }
 }
