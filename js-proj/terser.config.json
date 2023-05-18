@@ -8,7 +8,7 @@
   "mangle": {
     "toplevel": true,
     "properties": {
-      "reserved": ["Content-type"]
+      "reserved": ["Content-type", "--cell-size"]
     }
   }
 }
