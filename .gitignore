@@ -12,3 +12,10 @@ babelify/src/index.js
 babelify/templates/
 
 picross-rs/
+flask/project/static/js
+flask/project/static/oldjs
+flask/project/static/css
+flask/project/static/oldcss
+flask/project/puzzles/templates
+
+flask/app_old
