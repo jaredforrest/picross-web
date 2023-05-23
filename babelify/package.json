@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack && terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js && postcss --use postcss-css-variables -o dist/style.css template/style.css"
   },
   "author": "",
   "license": "ISC",

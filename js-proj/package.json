@@ -1,8 +1,11 @@
 {
   "name": "canvas",
   "collaborators": [
-    "The wasm-bindgen Developers"
+    "Jared Forrest"
   ],
+  "scripts": {
+      "build": "spack && terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js"
+  },
   "version": "0.1.0",
   "sideEffects": false,
   "devDependencies": {
