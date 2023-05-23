@@ -70,4 +70,5 @@ export function throwErr(message, options) {
   throw Error(message, options);
 }
 
+/** The current webpage */
 export const origin = new URL(document.location.origin);
