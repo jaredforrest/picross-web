@@ -49,4 +49,4 @@ def parse_and_validate_grid_data(data: Any) -> GridData | None:
 
     if not is_valid_type:
         return None
-    return {"side_nums": data[0], "top_nums": data[1]}
+    return {"side_nums": data["side_nums"], "top_nums": data["top_nums"]}
