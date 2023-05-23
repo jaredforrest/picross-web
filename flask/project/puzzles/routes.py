@@ -47,7 +47,7 @@ def get_width_height(args: MultiDict[str, str]):
 #    return render_template('books/index.html')
 
 
-@puzzles_blueprint.get('/puzzles/')
+@puzzles_blueprint.get('/puzzles')
 def list_puzzles():
     puzzles = app_session.query(Level).all()
     print(puzzles)
