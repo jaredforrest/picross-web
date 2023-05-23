@@ -1,5 +1,7 @@
 #!/bin/sh
 
+FLASK_DIR="../flask/project"
+
 SED='s/submit-button/b/g;
      s/grid-cell/c/g;
      s/empty/e/g;
@@ -16,23 +18,25 @@ npm install
 mkdir -p dist
 npx spack &&
 npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js &&
+#cp ./dist/init.js ./dist/index.js &&
 
 # extra minify
-sed -i "$SED" dist/index.js
+#sed -i "$SED" dist/index.js
 
 for file in template/*
 do
-    sed  "$SED" "$file" > "dist/$(basename "$file")"
+#    sed  "$SED" "$file" > "dist/$(basename "$file")"
+    cp "$file" "dist/$(basename "$file")"
 done
 
 # copy to server
-mkdir -p ../flask/app/static/css
-mkdir -p ../flask/app/static/js
-cp dist/index.js ../flask/app/static/js/index.js
-cp dist/style.css ../flask/app/static/css/style.css
+mkdir -p $FLASK_DIR/static/css
+mkdir -p $FLASK_DIR/app/static/js
+cp dist/index.js $FLASK_DIR/static/js/index.js
+cp dist/style.css $FLASK_DIR/static/css/style.css
 
-mkdir -p ../flask/app/templates
-cp dist/*.html ../flask/app/templates/
+mkdir -p ../flask/project/puzzles/templates
+cp dist/*.html ../flask/project/puzzles/templates/
 
 # extra
 npx brotli-cli compress dist/index.js
@@ -54,7 +58,7 @@ npx terser --config-file terser.config.json -- ./dist/init.js > ./dist/index.js
 npx postcss --use postcss-css-variables -o dist/style.css templates/style.css
 
 # copy to server
-mkdir -p ../flask/app/static/oldjs
-mkdir -p ../flask/app/static/oldcss
-cp dist/index.js ../flask/app/static/oldjs/index.js
-cp dist/style.css ../flask/app/static/oldcss/style.css
+mkdir -p $FLASK_DIR/static/oldjs
+mkdir -p $FLASK_DIR/static/oldcss
+cp dist/index.js $FLASK_DIR/static/oldjs/index.js
+cp dist/style.css $FLASK_DIR/static/oldcss/style.css
