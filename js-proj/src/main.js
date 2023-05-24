@@ -158,6 +158,7 @@ export function initLevel(sideNums, topNums, isNew = false) {
   root.style.setProperty(
     "--cell-size",
     `${Math.max(10, (300 / topNums.length) | 0)}px`,
+    "",
   );
 
   const grid = /** @type {HTMLTableElement} */ (
