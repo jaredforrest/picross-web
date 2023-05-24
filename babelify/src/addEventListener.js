@@ -1,6 +1,19 @@
-export default function addEvent(on, fn, self) {
-  return (self = this).attachEvent("on" + on, function (e) {
-    var e = e || window.event;
+import globalThis from "./global";
+
+/**
+ * @typedef {{ attachEvent: (on: string, fn: (ev: Event) => void) => void }} IEElement
+ */
+
+/**
+ * @template {keyof ElementEventMap} K
+ * @param {K} on
+ * @this {Element & IEElement}
+ * @param {(this: Element, ev: ElementEventMap[K]) => any} fn
+ * @returns
+ */
+export default function addEvent(on, fn) {
+  return this.attachEvent(`on${on}`, (/** @type {Event} */ e) => {
+    e = e || globalThis.event;
     e.preventDefault =
       e.preventDefault ||
       function () {
@@ -11,6 +24,6 @@ export default function addEvent(on, fn, self) {
       function () {
         e.cancelBubble = true;
       };
-    fn.call(self, e);
+    fn.call(this, e);
   });
 }

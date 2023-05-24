@@ -1,34 +1,43 @@
-import arrayPolyfill from './array';
-import fetch_ from './fetch';
-import classListGetter from './classList';
-import classListReplace from './classListReplace';
-import { URL as URL_, checkURLExists } from './url/url';
-import addEvent from './addEventListener';
+import arrayPolyfill from "./array";
+import fetch_ from "./fetch";
+import classListGetter from "./classList";
+import classListReplace from "./classListReplace";
+import { URL as URL_, checkURLExists } from "./url/url";
+import addEvent from "./addEventListener";
 
-import globalThis from './global'
+import globalThis from "./global";
 
 arrayPolyfill();
 
-if(!(globalThis.fetch)){
-    globalThis.fetch = fetch_
+if (!globalThis.fetch) {
+  globalThis.fetch = fetch_;
 }
-if(checkURLExists()){
-    globalThis.URL = URL_
+if (checkURLExists()) {
+  globalThis.URL = URL_;
 }
 
 if ("document" in globalThis) {
-  if (!("classList" in document.createElement("_")) || (document.createElementNS &&
-!("classList" in document.createElementNS("http://www.w3.org/2000/svg", "g"))
-  )) {
+  if (
+    !("classList" in document.createElement("_")) ||
+    (document.createElementNS &&
+      !(
+        "classList" in
+        document.createElementNS("http://www.w3.org/2000/svg", "g")
+      ))
+  ) {
     (function () {
       if (Object.defineProperty) {
-        let classListProperties = {
+        const classListProperties = {
           get: classListGetter,
           enumerable: true,
           configurable: true,
         };
         try {
-          Object.defineProperty(Element.prototype, "classList", classListProperties);
+          Object.defineProperty(
+            Element.prototype,
+            "classList",
+            classListProperties,
+          );
         } catch (ex) {
           // IE 8 doesn't support enumerable:true
           // adding undefined to fight this issue https://github.com/eligrey/classList.js/issues/36
@@ -38,7 +47,7 @@ if ("document" in globalThis) {
             Object.defineProperty(
               Element.prototype,
               "classList",
-              classListProperties
+              classListProperties,
             );
           }
         }
@@ -49,47 +58,50 @@ if ("document" in globalThis) {
   }
 }
 
-if (globalThis.DOMTokenList && !(DOMTokenList.prototype.replace)) { DOMTokenList.prototype.replace = classListReplace }
+if (globalThis.DOMTokenList && !DOMTokenList.prototype.replace) {
+  DOMTokenList.prototype.replace = classListReplace;
+}
 
-if(!(globalThis.addEventListener) && globalThis.Element){
-    Element.prototype.addEventListener = addEvent
+if (!globalThis.addEventListener && globalThis.Element) {
+  Element.prototype.addEventListener = addEvent;
 }
 
 if ("Location" in globalThis) {
   if (Object.defineProperty) {
-    Object.defineProperty(Location.prototype, "origin", {
-      get: function () {
-        return (
-          this.protocol +
-          "//" +
-          this.hostname +
-          (this.port ? ":" + this.port : "")
-        );
-      },
-    });
+    try {
+      Object.defineProperty(Location.prototype, "origin", {
+        get() {
+          return `${this.protocol}//${this.hostname}${
+            this.port ? `:${this.port}` : ""
+          }`;
+        },
+      });
+    } catch (e) {
+      Object.defineProperty(document.location, "origin", {
+        get() {
+          return `${this.protocol}//${this.hostname}${
+            this.port ? `:${this.port}` : ""
+          }`;
+        },
+      });
+    }
   } else if (Object.prototype.__defineGetter__) {
     try {
       Location.prototype.__defineGetter__("origin", function () {
-        return (
-          this.protocol +
-          "//" +
-          this.hostname +
-          (this.port ? ":" + this.port : "")
-        );
+        return `${
+          this.protocol
+        }//${this.hostname}${this.port ? `:${this.port}` : ""}`;
       });
     } catch (e) {
       window.location.__defineGetter__("origin", function () {
-        return (
-          this.protocol +
-          "//" +
-          this.hostname +
-          (this.port ? ":" + this.port : "")
-        );
+        return `${
+          this.protocol
+        }//${this.hostname}${this.port ? `:${this.port}` : ""}`;
       });
     }
   }
 }
 
-if(!(document.documentElement.style.setProperty)){
-    document.documentElement.style.setProperty = function() {};
+if (!document.documentElement.style.setProperty) {
+  document.documentElement.style.setProperty = function () {};
 }

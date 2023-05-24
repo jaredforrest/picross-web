@@ -5,39 +5,40 @@
 /**
  * @param {(args: void) => void} fn
  */
-let _immediateFn = function(fn) {
-    setTimeout(fn, 0);
+const _immediateFn = function (fn) {
+  setTimeout(fn, 0);
 };
 
- /**
-  * @param {unknown} err 
-  */
-let _unhandledRejectionFn = function (err) {
-  if (typeof console !== 'undefined' && console) {
-    console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
+/**
+ * @param {unknown} err
+ */
+const _unhandledRejectionFn = function (err) {
+  if (typeof console !== "undefined" && console) {
+    console.warn("Possible Unhandled Promise Rejection:", err); // eslint-disable-line no-console
   }
 };
 
 function noop() {}
 
 // Polyfill for Function.prototype.bind
- /**
-  * @template T
-  * @typedef {T extends (this: infer U, ...args: never) => any ? U : unknown} ThisParameterType
-  */
- /**
-  * @template T
-  * @typedef {unknown extends ThisParameterType<T> ? T : T extends (...args: infer A) => infer R ? (...args: A) => R : T} OmitThisParameter
-  */
- /**
-  *
-  * @template {Function} T
-  * @param {T} fn 
-  * @param {ThisParameterType<T>} thisArg 
-  * @returns OmitThisParameter<T>
-  */
+/**
+ * @template T
+ * @typedef {T extends (this: infer U, ...args: never) => any ? U : unknown} ThisParameterType
+ */
+/**
+ * @template T
+ * @typedef {unknown extends ThisParameterType<T> ? T : T extends (...args: infer A) => infer R ? (...args: A) => R : T} OmitThisParameter
+ */
+/**
+ *
+ * @template {Function} T
+ * @param {T} fn
+ * @param {ThisParameterType<T>} thisArg
+ * @returns OmitThisParameter<T>
+ */
 function bind(fn, thisArg) {
-  return function() {
+  return function () {
+    // eslint-disable-next-line prefer-rest-params
     fn.apply(thisArg, arguments);
   };
 }
@@ -63,13 +64,13 @@ function Promise(fn) {
   doResolve(fn, this);
 }
 
- /**
-  * @template T
-  *
-  * @param {Promise<T>} self 
-  * @param {Handler<T>} deferred 
-  * @returns void 
-  */
+/**
+ * @template T
+ *
+ * @param {Promise<T>} self
+ * @param {Handler<T>} deferred
+ * @returns void
+ */
 function handle(self, deferred) {
   while (self._state === 3) {
     self = self._value;
@@ -79,13 +80,13 @@ function handle(self, deferred) {
     return;
   }
   self._handled = true;
-  _immediateFn(function() {
-    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+  _immediateFn(() => {
+    const cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
     if (cb === null) {
       (self._state === 1 ? resolve : reject)(deferred.promise, self._value);
       return;
     }
-    var ret;
+    let ret;
     try {
       ret = cb(self._value);
     } catch (e) {
@@ -96,29 +97,29 @@ function handle(self, deferred) {
   });
 }
 
- /**
-  *
-  * @template T
-  * @param {Promise<T>} self 
-  * @param {Promise<T>} newValue 
-  * @returns void 
-  */
+/**
+ *
+ * @template T
+ * @param {Promise<T>} self
+ * @param {Promise<T>} newValue
+ * @returns void
+ */
 function resolve(self, newValue) {
   try {
     // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
     if (newValue === self)
-      throw new TypeError('A promise cannot be resolved with itself.');
+      throw new TypeError("A promise cannot be resolved with itself.");
     if (
       newValue &&
-      (typeof newValue === 'object' || typeof newValue === 'function')
+      (typeof newValue === "object" || typeof newValue === "function")
     ) {
-      var then = newValue.then;
+      const { then } = newValue;
       if (newValue instanceof Promise) {
         self._state = 3;
         self._value = newValue;
         finale(self);
         return;
-      } else if (typeof then === 'function') {
+      } else if (typeof then === "function") {
         doResolve(bind(then, newValue), self);
         return;
       }
@@ -131,51 +132,51 @@ function resolve(self, newValue) {
   }
 }
 
- /**
-  *
-  * @template T
-  * @param {Promise<T>} self 
-  * @param {unknown} newValue 
-  * @returns void 
-  */
+/**
+ *
+ * @template T
+ * @param {Promise<T>} self
+ * @param {unknown} newValue
+ * @returns void
+ */
 function reject(self, newValue) {
   self._state = 2;
   self._value = newValue;
   finale(self);
 }
 
- /**
-  *
-  * @template T
-  * @param {Promise<T>} self 
-  */
+/**
+ *
+ * @template T
+ * @param {Promise<T>} self
+ */
 function finale(self) {
   if (self._state === 2 && self._deferreds.length === 0) {
-    _immediateFn(function() {
+    _immediateFn(() => {
       if (!self._handled) {
         _unhandledRejectionFn(self._value);
       }
     });
   }
 
-  for (var i = 0, len = self._deferreds.length; i < len; i++) {
+  for (let i = 0, len = self._deferreds.length; i < len; i++) {
     handle(self, self._deferreds[i]);
   }
   self._deferreds = null;
 }
 
- /**
-  *
-  * @template T
-  *
-  * @constructor
-  * @param {(value: T) => T} onFulfilled 
-  * @param {(reason?: any) => never} onRejected 
-  * @param {Promise<T>} promise 
-  */
+/**
+ *
+ * @template T
+ *
+ * @constructor
+ * @param {(value: T) => T} onFulfilled
+ * @param {(reason?: any) => never} onRejected
+ * @param {Promise<T>} promise
+ */
 function Handler(onFulfilled, onRejected, promise) {
-  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
-  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+  this.onFulfilled = typeof onFulfilled === "function" ? onFulfilled : null;
+  this.onRejected = typeof onRejected === "function" ? onRejected : null;
   this.promise = promise;
 }
 
@@ -185,27 +186,27 @@ function Handler(onFulfilled, onRejected, promise) {
  *
  * Makes no guarantees about asynchrony.
  */
- /**
-  * @template T
-  *
-  * @param {(resolve: (value: T) => void, reject: (reason?: any) => void) => void} fn
-  * @param {Promise<T>} self 
-  * @returns {void} 
-  */
+/**
+ * @template T
+ *
+ * @param {(resolve: (value: T) => void, reject: (reason?: any) => void) => void} fn
+ * @param {Promise<T>} self
+ * @returns {void}
+ */
 function doResolve(fn, self) {
-  var done = false;
+  let done = false;
   try {
     fn(
-      function(value) {
+      (value) => {
         if (done) return;
         done = true;
         resolve(self, value);
       },
-      function(reason) {
+      (reason) => {
         if (done) return;
         done = true;
         reject(self, reason);
-      }
+      },
     );
   } catch (ex) {
     if (done) return;
@@ -214,46 +215,46 @@ function doResolve(fn, self) {
   }
 }
 
- /**
-  *
-  * @param {(reason?: any) => never} onRejected 
-  * @returns {Promise<T>}
-  */
-Promise.prototype['catch'] = function(onRejected) {
+/**
+ *
+ * @param {(reason?: any) => never} onRejected
+ * @returns {Promise<T>}
+ */
+Promise.prototype["catch"] = function (onRejected) {
   return this.then(null, onRejected);
 };
 
- /**
-  *
-  * @param {(value: T) => T} [onFulfilled]
-  * @param {(reason?: any) => never} [onRejected]
-  * @returns 
-  */
-Promise.prototype.then = function(onFulfilled, onRejected) {
-  var prom = new this.constructor(noop);
+/**
+ *
+ * @param {(value: T) => T} [onFulfilled]
+ * @param {(reason?: any) => never} [onRejected]
+ * @returns
+ */
+Promise.prototype.then = function (onFulfilled, onRejected) {
+  const prom = new this.constructor(noop);
 
   handle(this, new Handler(onFulfilled, onRejected, prom));
   return prom;
 };
 
- /**
-  * @template T
-  *
-  * @param {T | Promise<T>} value 
-  * @returns {Promise<T>}
-  */
-Promise.resolve = function(value) {
-  if (value && typeof value === 'object' && value.constructor === Promise) {
+/**
+ * @template T
+ *
+ * @param {T | Promise<T>} value
+ * @returns {Promise<T>}
+ */
+Promise.resolve = function (value) {
+  if (value && typeof value === "object" && value.constructor === Promise) {
     return value;
   }
 
-  return new Promise(function(resolve) {
+  return new Promise((resolve) => {
     resolve(value);
   });
 };
 
-Promise.reject = function(value) {
-  return new Promise(function(resolve, reject) {
+Promise.reject = function (value) {
+  return new Promise((resolve, reject) => {
     reject(value);
   });
 };
@@ -323,7 +324,5 @@ Promise.race = function(arr) {
   });
 };
 */
-
-
 
 export default Promise;
