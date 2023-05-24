@@ -1,7 +1,6 @@
 import { maxSubArray, transpose, padToMatrix, newArray } from "./util";
 import { NonoGrid } from "./nonoGrid";
 import { checkUsername, uploadPuzzle } from "./network";
-import {setQrCode} from "./qrcode";
 
 /**
  * @param {HTMLTableElement} sideNumsElement - HTMLElement refering to SideNums
@@ -75,11 +74,6 @@ function gridInit(
     document.createElement("td"),
   );
   const nonoGrid = new NonoGrid(sideNums, topNums, cellDoms);
-
-  // Create the qrCode for the grid
-  if(!isNew){
-    setQrCode(nonoGrid.toNonFile())
-  }
 
   // The cell are added to the page
   gridElement.innerText = "";
