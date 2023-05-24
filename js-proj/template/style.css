@@ -1,7 +1,7 @@
 @font-face {
   font-family: OpenSans;
-  src: url('/static/assets/OpenSans-VariableFont.woff2') format('woff2'),
-    url('/static/assets/OpenSans-VariableFont.woff') format('woff')
+  src: url("/static/assets/OpenSans-VariableFont.woff2") format("woff2"),
+    url("/static/assets/OpenSans-VariableFont.woff") format("woff");
 }
 
 :root {
@@ -101,16 +101,15 @@ table {
   width: fit-content;
 }
 
-
-[role=banner] {
-/*  font-family: "Helvetica Neue", Helvetica, Liberation Sans, Arial, sans-serif; */
+[role="banner"] {
+  /*  font-family: "Helvetica Neue", Helvetica, Liberation Sans, Arial, sans-serif; */
   font-size: 25px;
   font-weight: 700;
   color: #344861;
   margin: 15px 0;
 }
 
-[role=banner] a {
+[role="banner"] a {
   color: inherit;
   text-decoration: inherit;
 }

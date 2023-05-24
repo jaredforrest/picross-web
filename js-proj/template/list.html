@@ -1,11 +1,8 @@
-{% extends "base.html" %} {% block content %}
-    {%- for puzzle in puzzles %}
-    <a href="../puzzle/{{puzzle.id}}">
-      <div>
-        name: {{ puzzle.name }}, author: {{ puzzle.author }}, width: {{
-        puzzle.data.top_nums|length }} height: {{ puzzle.data.side_nums|length
-        }}
-      </div>
-    </a>
-    {% endfor %}
-{% endblock content %}
+{% extends "base.html" %} {% block content %} {%- for puzzle in puzzles %}
+<a href="../puzzle/{{puzzle.id}}">
+  <div>
+    name: {{ puzzle.name }}, author: {{ puzzle.author }}, width: {{
+    puzzle.data.top_nums|length }} height: {{ puzzle.data.side_nums|length }}
+  </div>
+</a>
+{% endfor %} {% endblock content %}

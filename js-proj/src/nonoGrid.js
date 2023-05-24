@@ -43,31 +43,32 @@ export class NonoGrid {
   /**
    * @returns {string}
    */
-  toNonFile(){
-      const width = this.top_nums.length;
-      const height = this.side_nums.length;
-      const colNumsText = this.top_nums.reduce((acc,i) => {
-              if(!(i.length)){
-                  return `${acc}0\n`
-              } else {
-                  const thisRowText = i.reduce((acc2,j) => `${acc2}${j},`,"").slice(0,-1);
-                  return `${acc}${thisRowText}\n`
-              }
-          }
-              ,"") 
-  
-      const rowNumsText = this.side_nums.reduce((acc,i) => {
-              if(!(i.length)){
-                  console.log(i);
-                  return `${acc}0\n`
-              } else {
-                  const thisColText = i.reduce((acc2,j) => `${acc2}${j},`,"").slice(0,-1);
-                  return `${acc}${thisColText}\n`
-              }
-          }
-              ,"") 
-  
-      return `width ${width}\nheight ${height}\n\nrows\n${rowNumsText}\ncolumns\n${colNumsText}\n`
-  
+  toNonFile() {
+    const width = this.top_nums.length;
+    const height = this.side_nums.length;
+    const colNumsText = this.top_nums.reduce((acc, i) => {
+      if (!i.length) {
+        return `${acc}0\n`;
+      } else {
+        const thisRowText = i
+          .reduce((acc2, j) => `${acc2}${j},`, "")
+          .slice(0, -1);
+        return `${acc}${thisRowText}\n`;
+      }
+    }, "");
+
+    const rowNumsText = this.side_nums.reduce((acc, i) => {
+      if (!i.length) {
+        console.log(i);
+        return `${acc}0\n`;
+      } else {
+        const thisColText = i
+          .reduce((acc2, j) => `${acc2}${j},`, "")
+          .slice(0, -1);
+        return `${acc}${thisColText}\n`;
+      }
+    }, "");
+
+    return `width ${width}\nheight ${height}\n\nrows\n${rowNumsText}\ncolumns\n${colNumsText}\n`;
   }
 }
