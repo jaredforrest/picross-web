@@ -24,3 +24,14 @@ export function uploadPuzzle(levelName, levelData) {
     }),
   }).then((response) => response.text());
 }
+
+/**
+ * Send a new puzzle to the server to add to db
+ * @param {string} levelID - name to send the server
+ * @returns {Promise<{topNums: number[][], sideNums: number[][]}>} - the string the server responds with, currently nothing
+ */
+export function downloadPuzzle(levelID) {
+  const url = new URL("/api/puzzle", origin);
+  url.searchParams.append("id", levelID);
+  return fetch(url).then((response) => response.json());
+}

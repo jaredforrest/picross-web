@@ -8,7 +8,8 @@
   "mangle": {
     "toplevel": true,
     "properties": {
-      "reserved": ["Content-type", "--cell-size"]
+      "keep_quoted": "strict",
+      "reserved": ["Content-type", "--cell-size", "init", "sideNums", "topNums"]
     }
   }
 }

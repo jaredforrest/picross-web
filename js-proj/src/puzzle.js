@@ -2,8 +2,6 @@ import { maxSubArray, transpose, padToMatrix, newArray } from "./util";
 import { NonoGrid } from "./nonoGrid";
 import { checkUsername, uploadPuzzle } from "./network";
 
-import "./routes";
-
 /**
  * @param {HTMLTableElement} sideNumsElement - HTMLElement refering to SideNums
  * @param {number[][]} sideNumsPadded - sideNums padded with 0 so they each row/columns is the same width/height
@@ -55,21 +53,27 @@ function createSideTopNums(
 }
 /**
  * @param {number[][]} sideNums - the numbers on the left side of the grid
- * @param {HTMLTableElement} sideNumsElement - the HTMLElement refering to the sideNums
  * @param {number[][]} topNums - the numbers on the top of the grid
- * @param {HTMLTableElement} topNumsElement - the HTMLElement refering to the topNums
- * @param {HTMLTableElement} gridElement - the HTMLElement containing the main grid
  * @param {boolean} isNew - true if creating a new puzzle
- * @returns {void}
+ * @returns {[DocumentFragment, NonoGrid]}
  */
-function gridInit(
-  sideNums,
-  sideNumsElement,
-  topNums,
-  topNumsElement,
-  gridElement,
-  isNew,
-) {
+function gridInit(sideNums, topNums, isNew) {
+  const gridTemplate = /** @type {DocumentFragment} */ (
+    /** @type {HTMLTemplateElement} */ (
+      document.querySelector("#grid-template")
+    ).content.cloneNode(true)
+  );
+
+  const gridElement = /** @type {HTMLTableElement} */ (
+    gridTemplate.querySelector("#nono-grid")
+  );
+  const sideNumsElement = /** @type {HTMLTableElement} */ (
+    gridTemplate.querySelector("#side-nums")
+  );
+  const topNumsElement = /** @type {HTMLTableElement} */ (
+    gridTemplate.querySelector("#top-nums")
+  );
+
   // The internal representation of the grid
   // Create the grid cells in the DOM
   const cellDoms = newArray(sideNums.length * topNums.length, () =>
@@ -111,51 +115,65 @@ function gridInit(
     gridElement.appendChild(rowDom);
   });
   createSideTopNums(sideNums, sideNumsElement, topNums, topNumsElement, isNew);
-  // TODO maybe clean this code up a bit
-  if (isNew) {
-    const submitButton = /** @type {HTMLButtonElement} */ (
-      document.querySelector("#submit-button")
-    );
-    const levelNameElement = /** @type {HTMLInputElement} */ (
-      document.querySelector("#level-name")
-    );
-    const validPassword = /** @type {HTMLElement} */ (
-      document.querySelector("#error-msg")
-    );
-    levelNameElement.addEventListener(
-      "keyup",
-      function () {
-        void checkUsername(this.value).then((value) => {
-          if (value) {
-            submitButton.disabled = true;
-          } else {
-            submitButton.disabled = false;
-          }
-          validPassword.textContent = value;
-          validPassword.innerText = value;
-        });
-      },
-      false,
-    );
-    submitButton.addEventListener(
-      "click",
-      () => {
-        void uploadPuzzle(
-          levelNameElement.value,
-          nonoGrid.grid_.calculateSideNums(),
-        );
-      },
-      false,
-    );
-  }
+
+  return [gridTemplate, nonoGrid];
 }
+
+/**
+ * @param {NonoGrid} nonoGrid
+ * @returns {DocumentFragment}
+ */
+function addForm(nonoGrid) {
+  const formTemplate = /** @type {DocumentFragment} */ (
+    /** @type {HTMLTemplateElement} */ (
+      document.querySelector("#form-template")
+    ).content.cloneNode(true)
+  );
+
+  const submitButton = /** @type {HTMLButtonElement} */ (
+    formTemplate.querySelector("#submit-button")
+  );
+  const levelNameElement = /** @type {HTMLInputElement} */ (
+    formTemplate.querySelector("#level-name")
+  );
+  const validPassword = /** @type {HTMLElement} */ (
+    formTemplate.querySelector("#error-msg")
+  );
+  levelNameElement.addEventListener(
+    "keyup",
+    function () {
+      void checkUsername(this.value).then((value) => {
+        if (value) {
+          submitButton.disabled = true;
+        } else {
+          submitButton.disabled = false;
+        }
+        validPassword.textContent = value;
+        validPassword.innerText = value;
+      });
+    },
+    false,
+  );
+  submitButton.addEventListener(
+    "click",
+    () => {
+      void uploadPuzzle(
+        levelNameElement.value,
+        nonoGrid.grid_.calculateSideNums(),
+      );
+    },
+    false,
+  );
+  return formTemplate;
+}
+
 /**
  * @param {number[][]} sideNums - the numbers on the left side of the grid
  * @param {number[][]} topNums - the numbers on the top of the grid
- * @param {boolean} [isNew] - true if creating a new puzzle
- * @returns {void}
+ * @param {boolean} isNew - true if creating a new puzzle
+ * @returns {() => void}
  */
-export function initLevel(sideNums, topNums, isNew = false) {
+export function init(sideNums, topNums, isNew) {
   const root = document.documentElement;
   root.style.setProperty(
     "--cell-size",
@@ -163,14 +181,21 @@ export function initLevel(sideNums, topNums, isNew = false) {
     "",
   );
 
-  const grid = /** @type {HTMLTableElement} */ (
-    document.querySelector("#nono-grid")
+  const [gridTemplate, nonoGrid] = gridInit(sideNums, topNums, isNew);
+
+  const innerContainerElement = /** @type {HTMLElement} */ (
+    document.querySelector("#inner-container")
   );
-  const sideNumsElement = /** @type {HTMLTableElement} */ (
-    document.querySelector("#side-nums")
-  );
-  const topNumsElement = /** @type {HTMLTableElement} */ (
-    document.querySelector("#top-nums")
-  );
-  gridInit(sideNums, sideNumsElement, topNums, topNumsElement, grid, isNew);
+
+  innerContainerElement.appendChild(gridTemplate);
+
+  if (isNew) {
+    const formTemplate = addForm(nonoGrid);
+    innerContainerElement.appendChild(formTemplate);
+  }
+
+  return () => {
+    console.log("hleowsdfaj");
+    innerContainerElement.innerHTML = "";
+  };
 }

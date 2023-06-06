@@ -13,7 +13,8 @@
       }
   },
   "module": {
-    "type": "es6"
+    "type": "es6",
+    "ignoreDynamic": true
   },
   "minify": true,
   "isModule": true

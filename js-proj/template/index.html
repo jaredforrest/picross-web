@@ -44,7 +44,7 @@
 
 {% endblock content %} {% block scripts %}
 <script src="{{ url_for('static', filename= 'oldjs/index.js') if is_old_browser else url_for('static', filename= 'js/index.js') }}"></script>
-<script>
+<!--script>
   init({{ side_nums }},{{ top_nums }},false)
-</script>
+</script-->
 {% endblock scripts %}

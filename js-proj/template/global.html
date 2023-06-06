@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en-US">
+    <meta charset="utf-8" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="{{ url_for('static',filename='oldcss/style.css') if is_old_browser else url_for('static',filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div id="outer-container">
+      <div id="inner-container">
+        <!--div role="banner"><a href="/puzzles">Picross Online</a></div-->
+        <div role="banner">
+          <a href="/puzzle/add?width=12&height=4">Picross</a>
+        </div>
+        <div role="banner"><a href="/puzzle/3">Picross</a></div>
+        <div class="horizontal-line"></div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename= 'oldjs/index.js') if is_old_browser else url_for('static', filename= 'js/index.js') }}"></script>
+
+    <template id="grid-template">
+      <table id="grid-container">
+        <tr>
+          <td></td>
+          <td>
+            <table id="top-nums"></table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table id="side-nums"></table>
+          </td>
+          <td>
+            <table id="nono-grid"></table>
+          </td>
+        </tr>
+      </table>
+    </template>
+
+    <template id="form-template">
+      <div id="form-container">
+        <label for="level-name">Title</label>
+        <input type="text" id="level-name" />
+        <button id="submit-button">Upload</button>
+        <div id="error-msg"></div>
+      </div>
+    </template>
+  </body>
+</html>

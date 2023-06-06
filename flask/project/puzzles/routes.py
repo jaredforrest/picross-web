@@ -121,22 +121,24 @@ def check_valid_level_name():
     return ""
 
 @puzzles_blueprint.get("/puzzle/<int:puzzle_id>")
-def get_puzzle(puzzle_id: int):
-    record = app_session.query(Level).filter(Level.id == puzzle_id).first()
-    if record:
-        is_old = is_old_browser(request.headers.get('User-Agent', ''))
-        grid_data: GridData = record.data
-        side_nums = grid_data["side_nums"]
-        top_nums = grid_data["top_nums"]
-        padded_side_nums = pad_to_matrix(side_nums, max_sub_array(side_nums) + 1)
-        padded_top_nums = pad_to_matrix(top_nums, max_sub_array(top_nums) + 1)
-        transposed_padded_top_nums = list(zip(*padded_top_nums))
-        return render_template('index.html', side_nums = side_nums, top_nums = top_nums,
-                padded_side_nums = padded_side_nums,
-                transposed_padded_top_nums = transposed_padded_top_nums,
-                is_old_browser=is_old)
-    else:
-        return str(puzzle_id)
+@puzzles_blueprint.get("/puzzle/add")
+def get_puzzle(puzzle_id = None):
+    return render_template('global.html')
+    #record = app_session.query(Level).filter(Level.id == puzzle_id).first()
+    #if record:
+    #    is_old = is_old_browser(request.headers.get('User-Agent', ''))
+    #    grid_data: GridData = record.data
+    #    side_nums = grid_data["side_nums"]
+    #    top_nums = grid_data["top_nums"]
+    #    padded_side_nums = pad_to_matrix(side_nums, max_sub_array(side_nums) + 1)
+    #    padded_top_nums = pad_to_matrix(top_nums, max_sub_array(top_nums) + 1)
+    #    transposed_padded_top_nums = list(zip(*padded_top_nums))
+    #    return render_template('index.html', side_nums = side_nums, top_nums = top_nums,
+    #            padded_side_nums = padded_side_nums,
+    #            transposed_padded_top_nums = transposed_padded_top_nums,
+    #            is_old_browser=is_old)
+    #else:
+    #    return str(puzzle_id)
 
 
 ## TODO delete puzzle

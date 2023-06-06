@@ -11,6 +11,8 @@ npm run build
 mkdir -p $FLASK_DIR/static/css
 mkdir -p $FLASK_DIR/static/js
 cp dist/index.js $FLASK_DIR/static/js/index.js
+cp dist/puzzle.js $FLASK_DIR/static/js/puzzle.js
+#cp dist/index.js $FLASK_DIR/static/js/index.js
 cp template/style.css $FLASK_DIR/static/css/style.css
 
 mkdir -p $FLASK_DIR/puzzles/templates

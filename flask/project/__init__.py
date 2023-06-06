@@ -41,6 +41,7 @@ def create_app():
     #Minify(app=app, html=True, js=True, cssless=True)
     
     app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
     CORS(app)
     #app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack.__ident_func__)
 
@@ -57,8 +58,10 @@ def register_blueprints(app):
     # Since the application instance is now created, register each Blueprint
     # with the Flask application instance (app)
     from project.puzzles import puzzles_blueprint
+    from project.api import api_blueprint
 
     app.register_blueprint(puzzles_blueprint)
+    app.register_blueprint(api_blueprint)
 
 
 def configure_logging(app):

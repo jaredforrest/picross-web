@@ -11,12 +11,14 @@
             "esnext",
             "dom"
         ],
+        "target":"ESNext",
         "module": "esnext",
         "noUnusedLocals": true,
         "noImplicitAny": true,
         "useUnknownInCatchVariables": true,
         "strict": true,
         "strictNullChecks": true,
+        "exactOptionalPropertyTypes": true,
         "alwaysStrict": true,
         "allowJs": true,
         "checkJs": true
