@@ -1,3 +1,4 @@
+/* Global font */
 @font-face {
   font-family: OpenSans;
   src: url("/static/assets/OpenSans-VariableFont.woff2") format("woff2"),
@@ -8,6 +9,9 @@
   --border-color: #ccc;
   --cell-size: 25px;
 }
+
+/* reset defaults */
+
 * {
   font-family: OpenSans, sans-serif;
 }
@@ -18,6 +22,36 @@ td {
   padding: 0;
 }
 
+/* Global Header */
+
+header {
+  font-size: 25px;
+  font-weight: 700;
+  color: #344861;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(0, 63, 123, 0.1);
+}
+
+header a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.header-container {
+  margin: 0 auto;
+  width: fit-content;
+  padding: 12px;
+}
+
+/* Container for page content */
+#inner-container {
+  /* this keeps everything the same width */
+  display: inline-block;
+  width: 100%;
+}
+
+/* for the puzzle pages */
+
 #grid-container {
   margin: 15px auto;
 }
@@ -26,7 +60,6 @@ table {
   border-collapse: collapse;
 }
 
-/*#nono-grid tr td, #top-nums tr td, #side-nums tr td {*/
 #grid-container tr td tr td {
   border-color: var(--border-color);
   width: var(--cell-size);
@@ -36,8 +69,7 @@ table {
   font-weight: 600;
   font-size: calc(calc(var(--cell-size) * 3) / 5);
 }
-.empty {
-  background: #eee;
+.empty { background: #eee;
 }
 .filled {
   background: #000;
@@ -87,33 +119,15 @@ table {
   text-align: center;
 }
 
-#inner-container {
-  /* this keeps everything the same width */
-  display: inline-block;
-}
+/* /puzzle_list */
 
-#outer-container {
-  /* This keeps it centred */
-  margin: 0 auto;
-
-  /* Makes it fit width of inner container */
-  display: table;
+.list-element {
+  margin: auto;
   width: fit-content;
+  display: block;
 }
 
-[role="banner"] {
-  /*  font-family: "Helvetica Neue", Helvetica, Liberation Sans, Arial, sans-serif; */
-  font-size: 25px;
-  font-weight: 700;
-  color: #344861;
-  margin: 15px 0;
-}
-
-[role="banner"] a {
-  color: inherit;
-  text-decoration: inherit;
-}
-
+/*
 .horizontal-line {
   position: relative;
   height: 1px;
@@ -131,3 +145,4 @@ table {
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%);
 }
+*/

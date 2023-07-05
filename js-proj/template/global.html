@@ -7,19 +7,30 @@
       rel="stylesheet"
       href="{{ url_for('static',filename='oldcss/style.css') if is_old_browser else url_for('static',filename='css/style.css') }}"
     />
+    <link
+      rel="preload"
+      href="{{ url_for('static', filename= 'oldjs/puzzle.js') if is_old_browser else url_for('static', filename= 'js/puzzle.js') }}"
+      as="script"
+      crossorigin
+    />
+    <script src=""></script>
   </head>
 
   <body>
-    <div id="outer-container">
-      <div id="inner-container">
-        <!--div role="banner"><a href="/puzzles">Picross Online</a></div-->
-        <div role="banner">
-          <a href="/puzzle/add?width=12&height=4">Picross</a>
-        </div>
-        <div role="banner"><a href="/puzzle/3">Picross</a></div>
-        <div class="horizontal-line"></div>
+    <header>
+      <!--div class="header-container" >
+        <a href="/puzzles">Picross</a>
+      </div-->
+      <div class="header-container">
+        <a href="/puzzle/add?width=12&height=4">Picross</a>
       </div>
-    </div>
+      <div class="header-container">
+        <a href="/puzzle/3">Picross</a>
+      </div>
+    </header>
+
+    <div id="inner-container"></div>
+
     <script src="{{ url_for('static', filename= 'oldjs/index.js') if is_old_browser else url_for('static', filename= 'js/index.js') }}"></script>
 
     <template id="grid-template">
@@ -49,5 +60,12 @@
         <div id="error-msg"></div>
       </div>
     </template>
+
+    <template id="element-template">
+      <a class="list-element" href="">
+        <div></div>
+      </a>
+    </template>
+
   </body>
 </html>

@@ -16,7 +16,7 @@ export function checkUsername(levelName) {
  * @returns {Promise<string>} - the string the server responds with, currently nothing
  */
 export function uploadPuzzle(levelName, levelData) {
-  return fetch(new URL("/puzzles/add", origin), {
+  return fetch(new URL("/api/puzzle_add", origin), {
     method: "POST",
     body: JSON.stringify({
       name: levelName,
@@ -33,5 +33,14 @@ export function uploadPuzzle(levelName, levelData) {
 export function downloadPuzzle(levelID) {
   const url = new URL("/api/puzzle", origin);
   url.searchParams.append("id", levelID);
+  return fetch(url).then((response) => response.json());
+}
+
+/**
+ * Send a new puzzle to the server to add to db
+ * @returns {Promise<{id: number, name: string, author: string, width: number, height: number}[]>} - the string the server responds with, currently nothing
+ */
+export function downloadPuzzleList() {
+  const url = new URL("/api/puzzle_list", origin);
   return fetch(url).then((response) => response.json());
 }

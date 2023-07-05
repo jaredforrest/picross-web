@@ -1,4 +1,4 @@
-import { downloadPuzzle } from "./network";
+import { downloadPuzzle, downloadPuzzleList } from "./network";
 import { Router } from "./router/index";
 import { newArray } from "./util";
 
@@ -12,8 +12,9 @@ export const router = new Router("", {
   "/puzzle/add": newPuzzle,
   "/puzzle/:id": openPuzzle,
   "/fakepage": () => {
-    console.log(`At fakepage`);
+    console.log("At fakepage");
   },
+  "/puzzles": puzzleList,
 });
 
 /**
@@ -24,13 +25,15 @@ function openPuzzle(id) {
   const puzzle = import("./puzzle.js");
 
   clean = downloadPuzzle(id).then((level) =>
-    puzzle.then((puzzle) => { console.log(level, level.sideNums, level.topNums);
-        return puzzle.init(level.sideNums, level.topNums, false)}),
+    puzzle.then((puzzle) => {
+      console.log(level, level.sideNums, level.topNums);
+      return puzzle.init(level.sideNums, level.topNums, false);
+    }),
   );
 }
 
 /**
- * The function to start a saved level
+ * The function to start a puzzle creator
  * @this {{width?: string, height?: string}}
  */
 function newPuzzle() {
@@ -49,4 +52,12 @@ function newPuzzle() {
   const topNums = newArray(width, () => []);
 
   clean = puzzle.then((puzzle) => puzzle.init(sideNums, topNums, true));
+}
+
+function puzzleList() {
+  const puzzleList = import("./puzzleList.js");
+
+  clean = downloadPuzzleList().then((levelList) =>
+    puzzleList.then((puzzle) => puzzle.init(levelList)),
+  );
 }

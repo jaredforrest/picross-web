@@ -195,7 +195,6 @@ export function init(sideNums, topNums, isNew) {
   }
 
   return () => {
-    console.log("hleowsdfaj");
     innerContainerElement.innerHTML = "";
   };
 }
